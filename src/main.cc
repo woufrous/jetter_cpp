@@ -1,5 +1,6 @@
 #include <mutex>
 #include <string>
+#include <memory>
 
 #include <serial/serial.h>
 
@@ -14,7 +15,7 @@ const byte_t JETTER_SCF = 0xDA;
 
 bytestring escape(const bytestring& data) {
     obytestringstream ret;
-    for (const byte_t& byte : data) {
+    for (const auto& byte : data) {
         if ((byte >= 0xD8) && (byte <= 0xDF)) {
             ret << JETTER_SCF << (byte & !(1<<4));
         } else {
@@ -26,39 +27,30 @@ bytestring escape(const bytestring& data) {
 
 byte_t checksum(const bytestring& data) {
     uint8_t sum = 0;
-    for (const byte_t& byte : data) {
+    for (const auto& byte : data) {
         sum += byte;
     }
     return sum;
 }
 
-struct SerialConfig {
-    std::string dev_name;
-    uint32_t baudrate;
-};
-
-class JetterSerial {
+class Jetter_com {
     public:
-        JetterSerial(const SerialConfig&);
-        JetterSerial() = delete;
-        JetterSerial(const JetterSerial&) = delete;
-        JetterSerial& operator=(const JetterSerial&) = delete;
+        Jetter_com(std::unique_ptr<serial::Serial>&& dev) : dev_(std::move(dev)) {}
+        Jetter_com() = delete;
+        Jetter_com(const Jetter_com&) = delete;
+        Jetter_com& operator=(const Jetter_com&) = delete;
 
-        std::string sync_command(std::string cmd);
+        /* std::string sync_command(std::string cmd); */
 
     private:
-        size_t send_command(const bytestring& data);
-        bytestring _get_response();
-        std::mutex _lock;
-        serial::Serial _dev;
+        size_t send_command(const bytestring& data) const;
+        bytestring get_response() const;
+        std::mutex lock_;
+        std::unique_ptr<serial::Serial> dev_;
 };
 
-JetterSerial::JetterSerial(const SerialConfig& cfg) :
-    _dev(cfg.dev_name, cfg.baudrate) {
-}
-
-size_t JetterSerial::send_command(const bytestring& data) {
-    obytestringstream cmd;
+size_t Jetter_com::send_command(const bytestring& data) const {
+    bytestringstream cmd;
 
     auto esc_data = escape(data);
 
@@ -66,16 +58,18 @@ size_t JetterSerial::send_command(const bytestring& data) {
         << esc_data
         << escape({checksum(esc_data)})
         << JETTER_STOP;
+    auto cmd_str = cmd.str();
 
-    std::vector<byte_t> ret;
-    for (const byte_t& byte : ret) {
-        ret.push_back(byte);
-    }
+    /* std::vector<byte_t> ret(cmd_str.begin(), cmd_str.end()); */
 
-    return _dev.write(ret);
+    return dev_->write(std::vector<byte_t>(cmd_str.begin(), cmd_str.end()));
 }
 
 
-int main() {
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        return 1;
+    }
+    Jetter_com jetter(std::make_unique<serial::Serial>(argv[1], 9600));
     return 0;
 }
