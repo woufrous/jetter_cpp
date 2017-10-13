@@ -48,10 +48,23 @@ include_directories(${serial_BASE_DIR}/include)
 # set compiler flags
 add_compile_options (-Wall -Wextra -Wpedantic -pthread)
 
-set (jetter_SRCS src/main.cc)
+set (jetter_SRCS src/Jetter_com.cpp)
+set (jetter_INCLUDE_DIR include)
 
-add_executable (jetter ${jetter_SRCS})
-target_link_libraries (jetter PUBLIC
+add_library (jetter ${jetter_SRCS})
+target_include_directories (jetter PUBLIC
+    ${jetter_INCLUDE_DIR}
+)
+target_link_libraries (
     ${serial_PROJECT_NAME}
+)
+
+add_executable (jetter_test src/main.cc)
+target_link_libraries (jetter_test PUBLIC
+    ${serial_PROJECT_NAME}
+    jetter
     pthread
+)
+target_include_directories (jetter_test PUBLIC
+    ${jetter_INCLUDE_DIR}
 )
