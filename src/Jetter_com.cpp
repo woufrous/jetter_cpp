@@ -54,25 +54,23 @@ size_t Jetter_com::send_command(const bytestring& data) const {
         << esc_data
         << escape({checksum(esc_data)})
         << JETTER_STOP;
-    auto cmd_str = cmd.str();
 
-    return dev_->write(std::vector<byte_t>(cmd_str.begin(), cmd_str.end()));
+    return dev_->write(cmd.str());
 }
 
 
 bytestring Jetter_com::get_response() const {
-    uint8_t buf[1];
     bytestring out;
 
     while (true) {
         // this will time out, if no more data can be read
-        dev_->read(buf, 1);
-        out += buf[0];
+        byte_t buf = dev_->read_byte();
+        out += buf;
 
-        if (buf[0] == JETTER_START) {
+        if (buf == JETTER_START) {
             out = buf;
         } else
-        if (buf[0] == JETTER_STOP) {
+        if (buf == JETTER_STOP) {
             break;
         }
     }

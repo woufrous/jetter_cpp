@@ -5,14 +5,14 @@
 #include <string>
 #include <memory>
 
-#include <serial/serial.h>
 #include <jetter/types.h>
+#include <jetter/Serial.h>
 
 namespace jetter {
 
 class Jetter_com {
     public:
-        Jetter_com(std::unique_ptr<serial::Serial>&& dev) : dev_(std::move(dev)) {}
+        Jetter_com(std::unique_ptr<jetter::ISerialDevice>&& dev) : dev_(std::move(dev)) {}
         Jetter_com() = delete;
         Jetter_com(const Jetter_com&) = delete;
         Jetter_com& operator=(const Jetter_com&) = delete;
@@ -21,7 +21,7 @@ class Jetter_com {
 
     private:
         std::mutex lock_;
-        std::unique_ptr<serial::Serial> dev_;
+        std::unique_ptr<jetter::ISerialDevice> dev_;
 
         size_t send_command(const bytestring& data) const;
         bytestring get_response() const;
