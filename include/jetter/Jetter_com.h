@@ -6,13 +6,9 @@
 #include <memory>
 
 #include <serial/serial.h>
+#include <jetter/types.h>
 
 namespace jetter {
-
-using byte_t = uint8_t;
-using bytestring = std::basic_string<byte_t>;
-using bytestringstream = std::basic_stringstream<byte_t>;
-using obytestringstream = std::basic_ostringstream<byte_t>;
 
 class Jetter_com {
     public:
