@@ -51,6 +51,10 @@ add_compile_options (-Wall -Wextra -Wpedantic -pthread)
 set (jetter_SRCS src/Jetter_com.cpp)
 set (jetter_INCLUDE_DIR include)
 
+include_directories (
+    ${jetter_INCLUDE_DIR}
+)
+
 add_library (jetter ${jetter_SRCS})
 target_include_directories (jetter PUBLIC
     ${jetter_INCLUDE_DIR}
