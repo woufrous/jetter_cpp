@@ -45,6 +45,10 @@ endif()
 include_directories(${serial_BASE_DIR}/include)
 # end of serial library stuff
 
+set (BUILD_GOOGLETEST TRUE)
+add_subdirectory (third_party/googletest)
+unset (BUILD_GOOGLETEST)
+
 # set compiler flags
 add_compile_options (-Wall -Wextra -Wpedantic -pthread)
 
@@ -53,12 +57,11 @@ set (jetter_INCLUDE_DIR include)
 
 include_directories (
     ${jetter_INCLUDE_DIR}
+    ${gtest_SOURCE_DIR}/include
+    ${gtest_SOURCE_DIR}
 )
 
 add_library (jetter ${jetter_SRCS})
-target_include_directories (jetter PUBLIC
-    ${jetter_INCLUDE_DIR}
-)
 target_link_libraries (
     ${serial_PROJECT_NAME}
 )
@@ -69,6 +72,9 @@ target_link_libraries (jetter_test PUBLIC
     jetter
     pthread
 )
-target_include_directories (jetter_test PUBLIC
-    ${jetter_INCLUDE_DIR}
+
+add_executable (unit_tests tests/simple.cpp)
+target_link_libraries (unit_tests
+    gtest
+    gtest_main
 )
