@@ -50,31 +50,32 @@ add_subdirectory (third_party/googletest)
 unset (BUILD_GOOGLETEST)
 
 # set compiler flags
-add_compile_options (-Wall -Wextra -Wpedantic -pthread)
+add_compile_options (-Wall -Wextra -Wpedantic)
 
 set (jetter_SRCS src/Jetter_com.cpp)
 set (jetter_INCLUDE_DIR include)
 
 include_directories (
     ${jetter_INCLUDE_DIR}
-    ${gtest_SOURCE_DIR}/include
-    ${gtest_SOURCE_DIR}
 )
 
 add_library (jetter ${jetter_SRCS})
-target_link_libraries (
+target_link_libraries (jetter PUBLIC
     ${serial_PROJECT_NAME}
 )
 
 add_executable (jetter_test src/main.cc)
 target_link_libraries (jetter_test PUBLIC
-    ${serial_PROJECT_NAME}
     jetter
-    pthread
 )
 
 add_executable (unit_tests tests/simple.cpp)
-target_link_libraries (unit_tests
+target_include_directories (unit_tests PUBLIC
+    ${gtest_SOURCE_DIR}/include
+    ${gtest_SOURCE_DIR}
+)
+target_link_libraries (unit_tests PUBLIC
+    jetter
     gtest
     gtest_main
 )
