@@ -4,15 +4,16 @@
 using namespace jetter;
 
 bytestring internal::escape(const bytestring& data) {
-    obytestringstream ret;
+    bytestring ret;
     for (const auto& byte : data) {
         if ((byte >= 0xD8) && (byte <= 0xDF)) {
-            ret << JETTER_SCF << (byte & !(1<<4));
+            ret += internal::JETTER_SCF;
+            ret += byte & ~(1<<4);
         } else {
-            ret << byte;
+            ret += byte;
         }
     }
-    return ret.str();
+    return ret;
 }
 
 bytestring internal::unescape(const bytestring& data) {
