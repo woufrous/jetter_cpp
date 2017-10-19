@@ -69,7 +69,7 @@ target_link_libraries (jetter_test PUBLIC
     jetter
 )
 
-add_executable (unit_tests tests/simple.cpp)
+add_executable (unit_tests tests/simple.cpp tests/serial.cpp)
 target_include_directories (unit_tests PUBLIC
     ${gtest_SOURCE_DIR}/include
     ${gtest_SOURCE_DIR}
