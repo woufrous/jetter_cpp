@@ -52,7 +52,10 @@ unset (BUILD_GOOGLETEST)
 # set compiler flags
 add_compile_options (-Wall -Wextra -Wpedantic)
 
-set (jetter_SRCS src/Jetter_com.cpp)
+set (jetter_SRCS
+    src/Jetter_com.cpp
+    src/SerialDevice.cpp
+)
 set (jetter_INCLUDE_DIR include)
 
 include_directories (
