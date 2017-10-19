@@ -1,5 +1,5 @@
 #include <jetter/Jetter_com.h>
-#include <jetter/internal/encode.h>
+#include <jetter/internal/serial_escape.h>
 
 using namespace jetter;
 

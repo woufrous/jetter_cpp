@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <jetter/internal/encode.h>
+#include <jetter/internal/serial_escape.h>
 
 using namespace jetter;
 using namespace jetter::internal;
