@@ -1,4 +1,5 @@
 #include <map>
+#include <random>
 
 #include <gtest/gtest.h>
 
@@ -6,6 +7,20 @@
 
 using namespace jetter;
 using namespace jetter::internal;
+
+bytestring random_bytestring(size_t length) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<byte_t> uniform;
+
+    bytestring rnd_string;
+
+    for (;length;--length) {
+        rnd_string += uniform(gen);
+    }
+
+    return rnd_string;
+}
 
 std::map<bytestring, bytestring> test_data {
     {{0xAA}, {0xAA}},
@@ -30,4 +45,17 @@ TEST(SerialTest, Unescape) {
     for (const auto& x : test_data) {
         EXPECT_EQ(x.first, unescape(x.second));
     }
+}
+
+TEST(SerialTest, EscapeRandom) {
+    bytestring test_string = random_bytestring(512);
+
+    for (const auto& c : escape(test_string)) {
+        ASSERT_FALSE((c != JETTER_SCF) && (0xD8 <= c) && (c <= 0xDF));
+    }
+}
+
+TEST(SerialTest, UnescapeEscapeRandom) {
+    bytestring test_string = random_bytestring(512);
+    ASSERT_EQ(test_string, unescape(escape(test_string)));
 }
