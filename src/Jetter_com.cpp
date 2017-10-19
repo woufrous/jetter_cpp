@@ -1,12 +1,9 @@
 #include <jetter/Jetter_com.h>
+#include <jetter/internal/encode.h>
 
 using namespace jetter;
 
-const byte_t JETTER_START = 0xD8;
-const byte_t JETTER_STOP = 0xDA;
-const byte_t JETTER_SCF = 0xDA;
-
-bytestring escape(const bytestring& data) {
+bytestring internal::escape(const bytestring& data) {
     obytestringstream ret;
     for (const auto& byte : data) {
         if ((byte >= 0xD8) && (byte <= 0xDF)) {
@@ -18,12 +15,12 @@ bytestring escape(const bytestring& data) {
     return ret.str();
 }
 
-bytestring unescape(const bytestring& data) {
+bytestring internal::unescape(const bytestring& data) {
     bytestring ret;
     bool unescape_next = false;
 
     for (const auto& byte : data) {
-        if (byte == JETTER_SCF) {
+        if (byte == internal::JETTER_SCF) {
             unescape_next = true;
             continue;
         }
@@ -37,7 +34,7 @@ bytestring unescape(const bytestring& data) {
     return ret;
 }
 
-byte_t checksum(const bytestring& data) {
+byte_t internal::checksum(const bytestring& data) {
     uint8_t sum = 0;
     for (const auto& byte : data) {
         sum += byte;
@@ -48,12 +45,12 @@ byte_t checksum(const bytestring& data) {
 size_t Jetter_com::send_command(const bytestring& data) const {
     bytestringstream cmd;
 
-    auto esc_data = escape(data);
+    auto esc_data = internal::escape(data);
 
-    cmd << JETTER_START
+    cmd << internal::JETTER_START
         << esc_data
-        << escape({checksum(esc_data)})
-        << JETTER_STOP;
+        << internal::escape({internal::checksum(esc_data)})
+        << internal::JETTER_STOP;
 
     return dev_->write(cmd.str());
 }
@@ -67,10 +64,10 @@ bytestring Jetter_com::get_response() const {
         byte_t buf = dev_->read_byte();
         out += buf;
 
-        if (buf == JETTER_START) {
+        if (buf == internal::JETTER_START) {
             out = buf;
         } else
-        if (buf == JETTER_STOP) {
+        if (buf == internal::JETTER_STOP) {
             break;
         }
     }
@@ -83,5 +80,5 @@ bytestring Jetter_com::sync_command(const bytestring& cmd) {
     this->send_command(cmd);
     auto out = get_response();
 
-    return unescape(out);
+    return internal::unescape(out);
 }
