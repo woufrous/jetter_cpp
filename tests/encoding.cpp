@@ -1,4 +1,5 @@
 #include <cstdint>
+#include <stdexcept>
 #include <tuple>
 #include <vector>
 
@@ -109,4 +110,50 @@ TEST(EncodingTest, Int24) {
             decode<ValueType::UINT24>(std::get<0>(tpl))
         );
     }
+}
+
+TEST(EncodingTest, LengthException) {
+    // Int8
+    EXPECT_THROW(
+        decode<ValueType::INT8>({0x00, 0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::UINT8>({0x00, 0x00}),
+        std::length_error
+    );
+    // Int16
+    EXPECT_THROW(
+        decode<ValueType::INT16>({0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::INT16>({0x00, 0x00, 0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::UINT16>({0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::UINT16>({0x00, 0x00, 0x00}),
+        std::length_error
+    );
+    // Int24
+    EXPECT_THROW(
+        decode<ValueType::INT24>({0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::INT24>({0x00, 0x00, 0x00, 0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::UINT24>({0x00}),
+        std::length_error
+    );
+    EXPECT_THROW(
+        decode<ValueType::UINT24>({0x00, 0x00, 0x00, 0x00}),
+        std::length_error
+    );
 }
