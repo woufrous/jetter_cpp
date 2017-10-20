@@ -25,6 +25,7 @@ class SerialDevice : public ISerialDevice {
         SerialDevice(SerialDevice&) = delete;
         SerialDevice(const SerialDevice&) = delete;
         SerialDevice& operator=(SerialDevice&) = delete;
+        SerialDevice& operator=(const SerialDevice&) = delete;
 
         size_t write(const bytestring& data) const override final;
         byte_t read_byte() const override final;
