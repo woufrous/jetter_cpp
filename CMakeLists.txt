@@ -45,6 +45,8 @@ endif()
 include_directories(${serial_BASE_DIR}/include)
 # end of serial library stuff
 
+add_subdirectory (third_party/fmt)
+
 set (BUILD_GOOGLETEST TRUE)
 add_subdirectory (third_party/googletest)
 unset (BUILD_GOOGLETEST)
@@ -63,8 +65,10 @@ include_directories (
 )
 
 add_library (jetter ${jetter_SRCS})
-target_link_libraries (jetter PUBLIC
-    ${serial_PROJECT_NAME}
+target_link_libraries (jetter
+    PUBLIC
+        ${serial_PROJECT_NAME}
+        fmt::fmt-header-only
 )
 
 add_executable (jetter_test src/main.cc)
