@@ -48,7 +48,7 @@ RetT decode(const bytestring&);
 // INT8
 template<>
 bytestring encode<ValueType::INT8>(_CTYPE(ValueType::INT8) value) {
-    return bytestring({value});
+    return bytestring({(byte_t)value});
 }
 
 template<>
@@ -62,7 +62,7 @@ _CTYPE(ValueType::INT8) decode<ValueType::INT8>(const bytestring& data) {
 // UINT8
 template<>
 bytestring encode<ValueType::UINT8>(_CTYPE(ValueType::UINT8) value) {
-    return bytestring({value});
+    return bytestring({(byte_t)value});
 }
 
 template<>
@@ -77,8 +77,8 @@ _CTYPE(ValueType::UINT8) decode<ValueType::UINT8>(const bytestring& data) {
 template<>
 bytestring encode<ValueType::INT16>(_CTYPE(ValueType::INT16) value) {
     return bytestring({
-        (value >> 8) & 0xFF,
-        value & 0xFF,
+        (byte_t)((value >> 8) & 0xFF),
+        (byte_t)(value & 0xFF),
     });
 }
 
@@ -97,8 +97,8 @@ _CTYPE(ValueType::INT16) decode<ValueType::INT16>(const bytestring& data) {
 template<>
 bytestring encode<ValueType::UINT16>(_CTYPE(ValueType::UINT16) value) {
     return bytestring({
-        (value >> 8) & 0xFF,
-        value & 0xFF,
+        (byte_t)((value >> 8) & 0xFF),
+        (byte_t)(value & 0xFF),
     });
 }
 
@@ -117,9 +117,9 @@ _CTYPE(ValueType::UINT16) decode<ValueType::UINT16>(const bytestring& data) {
 template<>
 bytestring encode<ValueType::INT24>(_CTYPE(ValueType::INT24) value) {
     return bytestring({
-        (value >> 16) & 0xFF,
-        (value >> 8) & 0xFF,
-        value & 0xFF,
+        (byte_t)((value >> 16) & 0xFF),
+        (byte_t)((value >> 8) & 0xFF),
+        (byte_t)(value & 0xFF),
     });
 }
 
@@ -141,9 +141,9 @@ _CTYPE(ValueType::INT24) decode<ValueType::INT24>(const bytestring& data) {
 template<>
 bytestring encode<ValueType::UINT24>(_CTYPE(ValueType::UINT24) value) {
     return bytestring({
-        (value >> 16) & 0xFF,
-        (value >> 8) & 0xFF,
-        value & 0xFF,
+        (byte_t)((value >> 16) & 0xFF),
+        (byte_t)((value >> 8) & 0xFF),
+        (byte_t)(value & 0xFF),
     });
 }
 
