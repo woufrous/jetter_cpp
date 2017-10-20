@@ -1,0 +1,15 @@
+image: alpine:latest
+
+build_gcc:
+  stage: build
+  before_script:
+    - apk update
+    - apk add g++ make cmake linux-headers python3
+  script:
+    - cmake -H. -Bbuild
+    - cmake --build build -- -j
+
+unittests:
+  stage: test
+  script:
+    - ./build/unit_tests
