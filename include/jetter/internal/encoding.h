@@ -25,7 +25,7 @@ struct ValueTypeToCType;
         using type = c_type; \
     }
 
-#define CTYPE(val_type) \
+#define _CTYPE(val_type) \
     ValueTypeToCType<val_type>::type
 
 
@@ -47,35 +47,35 @@ RetT decode(const bytestring&);
 
 // INT8
 template<>
-bytestring encode<ValueType::INT8>(CTYPE(ValueType::INT8) value) {
+bytestring encode<ValueType::INT8>(_CTYPE(ValueType::INT8) value) {
     return bytestring({value});
 }
 
 template<>
-CTYPE(ValueType::INT8) decode<ValueType::INT8>(const bytestring& data) {
+_CTYPE(ValueType::INT8) decode<ValueType::INT8>(const bytestring& data) {
     if (data.size() != 1) {
         throw std::length_error("One byte reqired");
     }
-    return static_cast<CTYPE(ValueType::INT8)>(data[0]);
+    return static_cast<_CTYPE(ValueType::INT8)>(data[0]);
 }
 
 // UINT8
 template<>
-bytestring encode<ValueType::UINT8>(CTYPE(ValueType::UINT8) value) {
+bytestring encode<ValueType::UINT8>(_CTYPE(ValueType::UINT8) value) {
     return bytestring({value});
 }
 
 template<>
-CTYPE(ValueType::UINT8) decode<ValueType::UINT8>(const bytestring& data) {
+_CTYPE(ValueType::UINT8) decode<ValueType::UINT8>(const bytestring& data) {
     if (data.size() != 1) {
         throw std::length_error("One byte reqired");
     }
-    return static_cast<CTYPE(ValueType::UINT8)>(data[0]);
+    return static_cast<_CTYPE(ValueType::UINT8)>(data[0]);
 }
 
 // INT16
 template<>
-bytestring encode<ValueType::INT16>(CTYPE(ValueType::INT16) value) {
+bytestring encode<ValueType::INT16>(_CTYPE(ValueType::INT16) value) {
     return bytestring({
         (value >> 8) & 0xFF,
         value & 0xFF,
@@ -83,11 +83,11 @@ bytestring encode<ValueType::INT16>(CTYPE(ValueType::INT16) value) {
 }
 
 template<>
-CTYPE(ValueType::INT16) decode<ValueType::INT16>(const bytestring& data) {
+_CTYPE(ValueType::INT16) decode<ValueType::INT16>(const bytestring& data) {
     if (data.size() != 2) {
         throw std::length_error("Two bytes reqired");
     }
-    return static_cast<CTYPE(ValueType::INT16)>(
+    return static_cast<_CTYPE(ValueType::INT16)>(
         data[0] << 8 |
         data[1]
     );
@@ -95,7 +95,7 @@ CTYPE(ValueType::INT16) decode<ValueType::INT16>(const bytestring& data) {
 
 // UINT16
 template<>
-bytestring encode<ValueType::UINT16>(CTYPE(ValueType::UINT16) value) {
+bytestring encode<ValueType::UINT16>(_CTYPE(ValueType::UINT16) value) {
     return bytestring({
         (value >> 8) & 0xFF,
         value & 0xFF,
@@ -103,11 +103,11 @@ bytestring encode<ValueType::UINT16>(CTYPE(ValueType::UINT16) value) {
 }
 
 template<>
-CTYPE(ValueType::UINT16) decode<ValueType::UINT16>(const bytestring& data) {
+_CTYPE(ValueType::UINT16) decode<ValueType::UINT16>(const bytestring& data) {
     if (data.size() != 2) {
         throw std::length_error("Two bytes reqired");
     }
-    return static_cast<CTYPE(ValueType::UINT16)>(
+    return static_cast<_CTYPE(ValueType::UINT16)>(
         data[0] << 8 |
         data[1]
     );
@@ -115,7 +115,7 @@ CTYPE(ValueType::UINT16) decode<ValueType::UINT16>(const bytestring& data) {
 
 // INT24
 template<>
-bytestring encode<ValueType::INT24>(CTYPE(ValueType::INT24) value) {
+bytestring encode<ValueType::INT24>(_CTYPE(ValueType::INT24) value) {
     return bytestring({
         (value >> 16) & 0xFF,
         (value >> 8) & 0xFF,
@@ -124,13 +124,13 @@ bytestring encode<ValueType::INT24>(CTYPE(ValueType::INT24) value) {
 }
 
 template<>
-CTYPE(ValueType::INT24) decode<ValueType::INT24>(const bytestring& data) {
+_CTYPE(ValueType::INT24) decode<ValueType::INT24>(const bytestring& data) {
     if (data.size() != 3) {
         throw std::length_error("Three bytes reqired");
     }
     // This is a little tricky, since int32_t requires bit 31 to be the sign bit.
     // To work around that, we have to shift 8bits too far,  convert and then shift back.
-    return static_cast<CTYPE(ValueType::INT24)>(
+    return static_cast<_CTYPE(ValueType::INT24)>(
         data[0] << 24 |
         data[1] << 16 |
         data[2] << 8
@@ -139,7 +139,7 @@ CTYPE(ValueType::INT24) decode<ValueType::INT24>(const bytestring& data) {
 
 // UINT24
 template<>
-bytestring encode<ValueType::UINT24>(CTYPE(ValueType::UINT24) value) {
+bytestring encode<ValueType::UINT24>(_CTYPE(ValueType::UINT24) value) {
     return bytestring({
         (value >> 16) & 0xFF,
         (value >> 8) & 0xFF,
@@ -148,11 +148,11 @@ bytestring encode<ValueType::UINT24>(CTYPE(ValueType::UINT24) value) {
 }
 
 template<>
-CTYPE(ValueType::UINT24) decode<ValueType::UINT24>(const bytestring& data) {
+_CTYPE(ValueType::UINT24) decode<ValueType::UINT24>(const bytestring& data) {
     if (data.size() != 3) {
         throw std::length_error("Three bytes reqired");
     }
-    return static_cast<CTYPE(ValueType::UINT24)>(
+    return static_cast<_CTYPE(ValueType::UINT24)>(
         data[0] << 16 |
         data[1] << 8 |
         data[2]

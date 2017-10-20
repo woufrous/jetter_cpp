@@ -11,8 +11,8 @@ using namespace ::jetter;
 using namespace ::jetter::internal;
 
 TEST(EncodingTest, Int8) {
-    using signed_t = ValueTypeToCType<ValueType::INT8>::type;
-    using unsigned_t = ValueTypeToCType<ValueType::UINT8>::type;
+    using signed_t = _CTYPE(ValueType::INT8);
+    using unsigned_t = _CTYPE(ValueType::UINT8);
 
     std::vector<std::tuple<bytestring, signed_t, unsigned_t>> test_vec {
         {{0x00}, 0, 0},
@@ -43,8 +43,8 @@ TEST(EncodingTest, Int8) {
 }
 
 TEST(EncodingTest, Int16) {
-    using signed_t = ValueTypeToCType<ValueType::INT16>::type;
-    using unsigned_t = ValueTypeToCType<ValueType::UINT16>::type;
+    using signed_t = _CTYPE(ValueType::INT16);
+    using unsigned_t = _CTYPE(ValueType::UINT16);
 
     std::vector<std::tuple<bytestring, signed_t, unsigned_t>> test_vec {
         {{0x00, 0x00}, 0, 0},
@@ -77,8 +77,8 @@ TEST(EncodingTest, Int16) {
 }
 
 TEST(EncodingTest, Int24) {
-    using signed_t = ValueTypeToCType<ValueType::INT24>::type;
-    using unsigned_t = ValueTypeToCType<ValueType::UINT24>::type;
+    using signed_t = _CTYPE(ValueType::INT24);
+    using unsigned_t = _CTYPE(ValueType::UINT24);
 
     std::vector<std::tuple<bytestring, signed_t, unsigned_t>> test_vec {
         {{0x00, 0x00, 0x00}, 0, 0},
