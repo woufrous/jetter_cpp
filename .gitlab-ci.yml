@@ -4,12 +4,20 @@ build_gcc:
   stage: build
   before_script:
     - apk update
-    - apk add g++ make cmake linux-headers python3
+    - apk add g++ make cmake linux-headers python3 git
   script:
     - cmake -H. -Bbuild
     - cmake --build build -- -j
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  artifacts:
+    paths:
+      - 'build/unit_tests'
 
 unittests:
   stage: test
+  before_script:
+    - apk update
+    - apk add libstdc++
   script:
     - ./build/unit_tests
