@@ -11,6 +11,48 @@ using reg_t = int32_t;
 using addr_t = uint32_t;
 
 
+namespace internal {
+enum StatusBit {
+    Data = 0,
+    InvalidParam,
+    InvalidCommand,
+    Timeout,
+    General,
+    NoError,
+    Reception,
+};
+} // namespace internal
+
+
+
+class JetterException : std::exception {
+    public:
+        JetterException(byte_t status) : status_(status) {}
+        virtual const char* what() const throw() {
+            std::string msg = "The following errorbits have been set:\n";
+            if (status_ & (1<<internal::StatusBit::InvalidParam)) {
+                msg += "Invalid parameter ";
+            }
+            if (status_ & (1<<internal::StatusBit::InvalidCommand)) {
+                msg += "Invalid command ";
+            }
+            if (status_ & (1<<internal::StatusBit::Timeout)) {
+                msg += "Timeout ";
+            }
+            if (status_ & (1<<internal::StatusBit::General)) {
+                msg += "General error ";
+            }
+            if (status_ & (1<<internal::StatusBit::Reception)) {
+                msg += "Invalid command ";
+            }
+            return msg.c_str();
+        }
+
+    private:
+        byte_t status_;
+};
+
+
 class IJetterDevice {
     public:
         virtual ~IJetterDevice() {}
@@ -53,7 +95,7 @@ class JetterDevice : public IJetterDevice {
     private:
         std::unique_ptr<jetter::JetterCom> dev_;
 
-        std::pair<bool, bytestring> sync_command(const bytestring& data) const;
+        bytestring sync_command(const bytestring& data) const;
 };
 
 }

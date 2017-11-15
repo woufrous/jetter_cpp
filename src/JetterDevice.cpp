@@ -5,9 +5,12 @@
 
 namespace jetter {
 
-std::pair<bool, bytestring> JetterDevice::sync_command(const bytestring& data) const {
+bytestring JetterDevice::sync_command(const bytestring& data) const {
     auto resp = dev_->sync_command(data);
-    return std::pair<bool, bytestring>({(resp[0] & 0x01), resp.substr(1)});
+    if (!(resp[0] & (1<<internal::StatusBit::NoError))) {
+        throw JetterException(resp[0]);
+    }
+    return resp.substr(1);
 }
 
 void JetterDevice::continue_program() const {}
