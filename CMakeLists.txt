@@ -58,6 +58,7 @@ set (jetter_SRCS
     src/JetterCom.cpp
     src/JetterDevice.cpp
     src/SerialDevice.cpp
+    src/encoding.cpp
 )
 set (jetter_INCLUDE_DIR include)
 

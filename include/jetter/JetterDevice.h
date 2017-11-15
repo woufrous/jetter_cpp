@@ -4,11 +4,12 @@
 #include <vector>
 
 #include <jetter/JetterCom.h>
+#include <jetter/internal/encoding.h>
 
 namespace jetter {
 
-using reg_t = int32_t;
-using addr_t = uint32_t;
+using reg_t = internal::ValueTypeToCType<internal::ValueType::INT24>::type;
+using addr_t = internal::ValueTypeToCType<internal::ValueType::UINT24>::type;
 
 
 namespace internal {
