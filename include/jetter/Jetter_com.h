@@ -13,6 +13,7 @@ namespace jetter {
 class Jetter_com {
     public:
         Jetter_com(std::unique_ptr<jetter::ISerialDevice>&& dev) : dev_(std::move(dev)) {}
+        Jetter_com(const std::string& port_name) : dev_(std::make_unique<jetter::SerialDevice>(port_name)) {}
 
         bytestring sync_command(const bytestring& cmd);
 

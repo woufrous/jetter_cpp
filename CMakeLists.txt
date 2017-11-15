@@ -56,6 +56,7 @@ add_compile_options (-Wall -Wextra -Wpedantic)
 
 set (jetter_SRCS
     src/Jetter_com.cpp
+    src/JetterDevice.cpp
     src/SerialDevice.cpp
 )
 set (jetter_INCLUDE_DIR include)
@@ -72,8 +73,9 @@ target_link_libraries (jetter
 )
 
 add_executable (jetter_test src/main.cc)
-target_link_libraries (jetter_test PUBLIC
-    jetter
+target_link_libraries (jetter_test
+    PUBLIC
+        jetter
 )
 
 add_executable (unit_tests tests/serial.cpp tests/encoding.cpp)
