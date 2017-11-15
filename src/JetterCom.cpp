@@ -1,4 +1,4 @@
-#include <jetter/Jetter_com.h>
+#include <jetter/JetterCom.h>
 #include <jetter/internal/serial_escape.h>
 
 using namespace jetter;
@@ -43,7 +43,7 @@ byte_t internal::checksum(const bytestring& data) {
     return sum;
 }
 
-size_t Jetter_com::send_command(const bytestring& data) const {
+size_t JetterCom::send_command(const bytestring& data) const {
     bytestringstream cmd;
 
     auto esc_data = internal::escape(data);
@@ -57,7 +57,7 @@ size_t Jetter_com::send_command(const bytestring& data) const {
 }
 
 
-bytestring Jetter_com::get_response() const {
+bytestring JetterCom::get_response() const {
     bytestring out;
 
     while (true) {
@@ -76,7 +76,7 @@ bytestring Jetter_com::get_response() const {
 }
 
 
-bytestring Jetter_com::sync_command(const bytestring& cmd) {
+bytestring JetterCom::sync_command(const bytestring& cmd) {
     std::lock_guard<std::mutex> guard(this->lock_);
     this->send_command(cmd);
     auto out = get_response();

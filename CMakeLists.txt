@@ -55,7 +55,7 @@ unset (BUILD_GOOGLETEST)
 add_compile_options (-Wall -Wextra -Wpedantic)
 
 set (jetter_SRCS
-    src/Jetter_com.cpp
+    src/JetterCom.cpp
     src/JetterDevice.cpp
     src/SerialDevice.cpp
 )

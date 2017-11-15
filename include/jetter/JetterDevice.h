@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <jetter/Jetter_com.h>
+#include <jetter/JetterCom.h>
 
 namespace jetter {
 
@@ -32,10 +32,10 @@ class IJetterDevice {
 
 class JetterDevice : public IJetterDevice {
     public:
-        JetterDevice(std::unique_ptr<jetter::Jetter_com>&& dev)
+        JetterDevice(std::unique_ptr<jetter::JetterCom>&& dev)
             : dev_(std::move(dev)) {}
         JetterDevice(const std::string& port_name)
-            : JetterDevice(std::make_unique<jetter::Jetter_com>(port_name)) {}
+            : JetterDevice(std::make_unique<jetter::JetterCom>(port_name)) {}
 
         // program control
         void continue_program() const override;
@@ -51,7 +51,7 @@ class JetterDevice : public IJetterDevice {
         void reset_flag(addr_t flag) const override; 
 
     private:
-        std::unique_ptr<jetter::Jetter_com> dev_;
+        std::unique_ptr<jetter::JetterCom> dev_;
 
         std::pair<bool, bytestring> sync_command(const bytestring& data) const;
 };
