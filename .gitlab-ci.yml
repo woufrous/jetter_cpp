@@ -20,4 +20,4 @@ build_gcc:
 unittests:
   stage: test
   script:
-    - ./build/unit_tests
+    - ./build/bin/unit_tests
