@@ -3,11 +3,14 @@ image: alpine:latest
 build_gcc:
   stage: build
   before_script:
-    - apk update
-    - apk add g++ make cmake linux-headers python3 git
+    - apk add --no-cache g++ make cmake linux-headers python3 git libstdc++
+    - pip3 install conan
   script:
-    - cmake -H. -Bbuild
-    - cmake --build build -- -j
+    - mkdir build
+    - cd build
+    - conan install --build -scompiler.libcxx=libstdc++11 ..
+    - cmake ..
+    - cmake --build . -- -j
   variables:
     GIT_SUBMODULE_STRATEGY: normal
   artifacts:
@@ -16,8 +19,5 @@ build_gcc:
 
 unittests:
   stage: test
-  before_script:
-    - apk update
-    - apk add libstdc++
   script:
     - ./build/unit_tests
