@@ -6,6 +6,9 @@ set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
+include (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup ()
+
 # serial library stuff
 # all this is copied from the serial CMakeLists.txt
 set (serial_PROJECT_NAME serial)
@@ -45,12 +48,6 @@ endif()
 include_directories(${serial_BASE_DIR}/include)
 # end of serial library stuff
 
-add_subdirectory (third_party/fmt)
-
-set (BUILD_GOOGLETEST TRUE)
-add_subdirectory (third_party/googletest)
-unset (BUILD_GOOGLETEST)
-
 # set compiler flags
 add_compile_options (-Wall -Wextra -Wpedantic)
 
@@ -70,7 +67,7 @@ add_library (jetter ${jetter_SRCS})
 target_link_libraries (jetter
     PUBLIC
         ${serial_PROJECT_NAME}
-        fmt::fmt-header-only
+        ${CONAN_LIBS}
 )
 
 add_executable (jetter_test src/main.cc)
@@ -80,12 +77,8 @@ target_link_libraries (jetter_test
 )
 
 add_executable (unit_tests tests/serial.cpp tests/encoding.cpp)
-target_include_directories (unit_tests PUBLIC
-    ${gtest_SOURCE_DIR}/include
-    ${gtest_SOURCE_DIR}
-)
-target_link_libraries (unit_tests PUBLIC
-    jetter
-    gtest
-    gtest_main
+target_link_libraries (unit_tests
+    PUBLIC
+        jetter
+        ${CONAN_LIBS}
 )

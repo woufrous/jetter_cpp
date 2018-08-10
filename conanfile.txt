@@ -1,0 +1,9 @@
+[requires]
+gtest/1.8.0@bincrafters/stable
+fmt/5.1.0@bincrafters/stable
+
+[options]
+fmt:header_only=True
+
+[generators]
+cmake
