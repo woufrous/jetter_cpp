@@ -19,5 +19,7 @@ build_gcc:
 
 unittests:
   stage: test
+  before_script:
+    - apk add --no-cache libstdc++
   script:
     - ./build/bin/unit_tests
