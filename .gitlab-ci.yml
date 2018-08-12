@@ -15,7 +15,7 @@ build_gcc:
     GIT_SUBMODULE_STRATEGY: normal
   artifacts:
     paths:
-      - 'build/unit_tests'
+      - 'build/bin/unit_tests'
 
 unittests:
   stage: test
