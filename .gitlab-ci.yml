@@ -3,7 +3,7 @@ image: alpine:latest
 build_gcc:
   stage: build
   before_script:
-    - apk add --no-cache g++ make cmake linux-headers python3 git libstdc++
+    - apk add --no-cache g++ make cmake linux-headers python3-dev git libstdc++
     - pip3 install conan
   script:
     - mkdir build
