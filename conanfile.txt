@@ -1,6 +1,7 @@
 [requires]
 gtest/1.8.0@bincrafters/stable
 fmt/5.1.0@bincrafters/stable
+serial/1.2.1@demo/testing
 
 [options]
 fmt:header_only=True

@@ -6,56 +6,7 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 
 include (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup ()
-
-# serial library stuff
-set (serial_BASE_DIR "third_party/serial")
-add_library (serial
-    ${serial_BASE_DIR}/src/serial.cc
-)
-add_library (serial::serial ALIAS serial)
-target_compile_features (serial
-    PUBLIC
-        cxx_std_11
-)
-target_include_directories (serial
-    PUBLIC
-        ${serial_BASE_DIR}/include
-)
-if (APPLE)
-    target_sources (serial
-        PRIVATE
-            ${serial_BASE_DIR}/src/impl/unix.cc
-            ${serial_BASE_DIR}/src/impl/list_ports/list_ports_osx.cc
-    )
-    target_link_libraries (serial
-        PUBLIC
-            ${FOUNDATION_LIBRARY} ${IOKIT_LIBRARY}
-    )
-elseif (UNIX)
-    target_sources (serial
-        PRIVATE
-            ${serial_BASE_DIR}/src/impl/unix.cc
-            ${serial_BASE_DIR}/src/impl/list_ports/list_ports_linux.cc
-    )
-    target_link_libraries (serial
-        PUBLIC
-            rt pthread
-    )
-elseif (WIN32)
-    target_sources (serial
-        PRIVATE
-            ${serial_BASE_DIR}/src/impl/win.cc
-            ${serial_BASE_DIR}/src/impl/list_ports/list_ports_win.cc
-    )
-    target_link_libraries (serial
-        PUBLIC
-            setupapi
-    )
-else ()
-    message (FATAL_ERROR "serial lib only works only on Windows, MacOS and Linux/Unix")
-endif ()
-# end of serial library stuff
+conan_basic_setup (TARGETS)
 
 add_library (jetter
     src/JetterCom.cpp
@@ -70,8 +21,8 @@ target_include_directories (jetter
 )
 target_link_libraries (jetter
     PUBLIC
-        serial::serial
-        ${CONAN_LIBS}
+        CONAN_PKG::serial
+        CONAN_PKG::fmt
 )
 target_compile_options (jetter
     PUBLIC
@@ -86,11 +37,12 @@ add_executable (jetter_test src/main.cc)
 target_link_libraries (jetter_test
     PUBLIC
         jetter
+        CONAN_PKG::fmt
 )
 
 add_executable (unit_tests tests/serial.cpp tests/encoding.cpp)
 target_link_libraries (unit_tests
     PUBLIC
         jetter
-        ${CONAN_LIBS}
+        CONAN_PKG::gtest
 )
