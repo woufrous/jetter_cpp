@@ -1,4 +1,5 @@
 CMAKE		?= cmake
+CONAN		?= conan
 
 BUILDDIR	?= build
 
@@ -9,6 +10,11 @@ all: $(BUILDDIR)/Makefile
 
 doc: $(DOXYFILE)
 	doxygen $<
+
+$(BUILDDIR)/conanbuildinfo.cmake: conanfile.txt
+	$(CONAN) install --build=missing -if $(BUILDDIR) .
+
+CMakeLists.txt: $(BUILDDIR)/conanbuildinfo.cmake
 
 $(BUILDDIR)/Makefile: CMakeLists.txt
 	$(CMAKE) -H. -B$(BUILDDIR)
