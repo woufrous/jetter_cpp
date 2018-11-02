@@ -13,6 +13,7 @@ add_library (jetter
     src/JetterDevice.cpp
     src/SerialDevice.cpp
     src/encoding.cpp
+    src/exceptions.cpp
 )
 add_library (jetter::jetter ALIAS jetter)
 target_include_directories (jetter

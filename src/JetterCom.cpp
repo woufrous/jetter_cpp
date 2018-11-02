@@ -1,4 +1,5 @@
 #include <jetter/JetterCom.h>
+#include <jetter/exceptions.h>
 #include <jetter/internal/serial_escape.h>
 
 using namespace jetter;

@@ -1,4 +1,5 @@
 #include <jetter/JetterDevice.h>
+#include <jetter/exceptions.h>
 #include <jetter/internal/encoding.h>
 
 namespace jetter {
@@ -6,14 +7,14 @@ namespace jetter {
 bytestring JetterDevice::sync_command(const bytestring& data) const {
     auto resp = dev_->sync_command(data);
     if (!(resp[0] & (1<<internal::StatusBit::NoError))) {
-        throw JetterException(resp[0]);
+        throw JetterException(internal::error_msg_from_status(resp[0]));
     }
     return resp.substr(1);
 }
 
 void JetterDevice::set_program_state(uint8_t task, internal::ProgramState state) const {
     if (task > 0xAA) {
-        throw JetterException(1<<internal::StatusBit::InvalidParam);
+        throw JetterException(internal::error_msg_from_status((1<<internal::StatusBit::InvalidParam)));
     }
     bytestring req = {'N'};
     req += internal::encode<internal::ValueType::UINT8>(static_cast<uint8_t>(state));
