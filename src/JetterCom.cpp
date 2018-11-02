@@ -50,7 +50,7 @@ size_t JetterCom::send_command(const bytestring& data) const {
 
     cmd << internal::JETTER_START
         << esc_data
-        << internal::escape({internal::checksum(esc_data)})
+        << internal::escape({internal::checksum(cmd.str())})
         << internal::JETTER_STOP;
 
     return dev_->write(cmd.str());
