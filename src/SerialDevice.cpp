@@ -2,8 +2,15 @@
 
 namespace jetter {
 
-SerialDevice::SerialDevice(const std::string& dev_name) {
-    dev_ = std::make_unique<serial::Serial>(dev_name);
+SerialDevice::SerialDevice(const std::string& dev_name) :
+    dev_(std::make_unique<serial::Serial>(dev_name,
+                                          9600,
+                                          serial::Timeout::simpleTimeout(500),
+                                          serial::eightbits,
+                                          serial::parity_even,
+                                          serial::stopbits_one,
+                                          serial::flowcontrol_none
+    )) {
 }
 
 size_t SerialDevice::write(const bytestring& data) const {
